@@ -1,6 +1,6 @@
 // t02: GPS GT-502MGG-N 受信確認
-// GPS TX は 2SC1815 反転バッファ経由で D0(RX1) へ (docs/wiring.md §2)。
-// 反転して届くので RX1(PC5) の INVEN で論理を戻す。
+// GPS TX は 2SC1815 反転バッファ経由で D1(RX1=PC5) へ (docs/wiring.md §2)。
+// 反転して届くので RX1 の INVEN で論理を戻す。
 // 1PPS も反転バッファ経由で D2 へ (FALLING が秒頭)。
 // USB シリアルモニタ (115200bps) に NMEA をそのまま流し、1 秒ごとに PPS 回数を表示。
 
@@ -11,7 +11,10 @@ void ppsIsr() { ppsCount++; }
 void setup() {
   Serial.begin(115200);
   Serial1.begin(9600);
-  PORTC.PIN5CTRL |= PORT_INVEN_bm; // D0=PC5: 反転バッファ分を論理反転
+  // D1=PC5(RX1): 反転バッファ分を INVEN で論理反転 (エミュレーション設定でも通るようマクロ経由)
+  PORT_t *rxPort = digitalPinToPortStruct(1);
+  volatile uint8_t *rxCtrl = getPINnCTRLregister(rxPort, digitalPinToBitPosition(1));
+  if (rxCtrl) *rxCtrl |= PORT_INVEN_bm;
   pinMode(2, INPUT);
   attachInterrupt(digitalPinToInterrupt(2), ppsIsr, FALLING);
   Serial.println(F("--- t02 GPS echo ---"));

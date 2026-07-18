@@ -22,7 +22,7 @@ bool readRegs(uint8_t reg, uint8_t *buf, uint8_t len) {
   Wire.beginTransmission(MAG_ADDR);
   Wire.write(reg);
   if (Wire.endTransmission(false) != 0) return false;
-  Wire.requestFrom(MAG_ADDR, len);
+  Wire.requestFrom(MAG_ADDR, (size_t)len);
   for (uint8_t i = 0; i < len; i++) buf[i] = Wire.read();
   return true;
 }

@@ -34,7 +34,7 @@ static bool readRegs(uint8_t reg, uint8_t *buf, uint8_t len) {
   Wire.beginTransmission(ADDR);
   Wire.write(reg);
   if (Wire.endTransmission(false) != 0) return false;
-  if (Wire.requestFrom(ADDR, len) != len) return false;
+  if (Wire.requestFrom(ADDR, (size_t)len) != len) return false;
   for (uint8_t i = 0; i < len; i++) buf[i] = Wire.read();
   return true;
 }

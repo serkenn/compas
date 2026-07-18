@@ -2,7 +2,8 @@
 #include <Arduino.h>
 
 // ---- ピンアサイン (docs/wiring.md §7 参照) ----
-constexpr uint8_t PIN_PPS = 2; // 1PPS (反転バッファ経由, FALLING が秒頭)
+constexpr uint8_t PIN_GPS_RX = 1; // D1 = RX1(PC5)。GPS TX を反転バッファ経由で受ける
+constexpr uint8_t PIN_PPS = 2;    // 1PPS (反転バッファ経由, FALLING が秒頭)
 constexpr uint8_t PIN_LCD_RS = 3, PIN_LCD_E = 4;
 constexpr uint8_t PIN_LCD_D4 = 5, PIN_LCD_D5 = 6, PIN_LCD_D6 = 7, PIN_LCD_D7 = 8;
 constexpr uint8_t PIN_DIG[3] = {9, 10, 11};                  // 桁選択 (H=ON)

@@ -19,8 +19,11 @@ static uint32_t lastLogMs = 0;
 
 void begin() {
   Serial1.begin(GPS_BAUD);
-  // GPS TX は 2SC1815 反転バッファ経由 → RX1(D0=PC5) の論理を反転して受ける
-  PORTC.PIN5CTRL |= PORT_INVEN_bm;
+  // GPS TX は 2SC1815 反転バッファ経由 → RX1(D1=PC5) の論理を INVEN で反転して受ける。
+  // レジスタ直書きだと ATMEGA328 レジスタエミュレーション有効時に衝突するため、コアのマクロ経由で触る。
+  PORT_t *rxPort = digitalPinToPortStruct(PIN_GPS_RX);
+  volatile uint8_t *rxCtrl = getPINnCTRLregister(rxPort, digitalPinToBitPosition(PIN_GPS_RX));
+  if (rxCtrl) *rxCtrl |= PORT_INVEN_bm;
   pinMode(PIN_PPS, INPUT);
   attachInterrupt(digitalPinToInterrupt(PIN_PPS), ppsIsr, FALLING);
 }

@@ -21,7 +21,7 @@ void setup() {
   Wire.beginTransmission(DS1307);
   Wire.write(0x00);
   Wire.endTransmission();
-  Wire.requestFrom(DS1307, (uint8_t)1);
+  Wire.requestFrom(DS1307, (size_t)1);
   uint8_t sec = Wire.read();
   if (sec & 0x80) {
     Serial.println(F("RTC stopped -> set 2026-01-01 00:00:00"));
@@ -42,7 +42,7 @@ void loop() {
   Wire.beginTransmission(DS1307);
   Wire.write(0x00);
   Wire.endTransmission();
-  Wire.requestFrom(DS1307, (uint8_t)7);
+  Wire.requestFrom(DS1307, (size_t)7);
   uint8_t s = bcd2dec(Wire.read() & 0x7F);
   uint8_t mi = bcd2dec(Wire.read());
   uint8_t h = bcd2dec(Wire.read() & 0x3F);

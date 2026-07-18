@@ -58,7 +58,7 @@ static bool rtcRead(ClockTime &t) {
   Wire.beginTransmission(DS1307);
   Wire.write((uint8_t)0x00);
   if (Wire.endTransmission() != 0) return false;
-  if (Wire.requestFrom(DS1307, (uint8_t)7) != 7) return false;
+  if (Wire.requestFrom(DS1307, (size_t)7) != 7) return false;
   uint8_t sec = Wire.read();
   if (sec & 0x80) return false; // 発振停止 = 未設定
   t.second = bcd2dec(sec & 0x7F);
